@@ -11,11 +11,21 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var myAnswer = 0
     @State private var selectTable = 1
     @State private var tipPercentage = 20
     @State private var numQuestions = 5
     @State private var multiplier = Int.random(in: 1...12)
+    @FocusState private var amountIsFocused: Bool
     let questionCount = [5,10,15,20]
+    
+    var calculatedAnswer: Int {
+        let multiplicand = selectTable
+        let multiplier = multiplier
+        let answer = multiplicand * multiplier
+        
+        return answer
+    }
     
     
     var body: some View {
@@ -58,17 +68,52 @@ struct ContentView: View {
                         Section{
                             TextField("Amount", value: $multiplier, format: .number)
                                 .padding(.horizontal, 110)
-                            
+                            Text("?")
+                                .padding(.horizontal, 10)
+                           
                         }
                         
                         
+                        
+                        
                     }
+                    
+                    Spacer()
+                    Spacer()
+                    
+                    Section("My Answer:"){
+                        TextField("Amount", value: $myAnswer, format: .number)
+                    }
+                    .keyboardType(.decimalPad)
+                    .focused($amountIsFocused)
+                    
+                    Button("Submit") {
+                        amountIsFocused = false
+                        
+                        
+                    }
+                    
+                    Spacer()
+                    Spacer()
+                    
+                    Section("The answer is:"){
+                        Text(calculatedAnswer, format: .number)
+                    }
+                    
+                    
                 
                         
                 }
             }
-            .navigationTitle("Test Your Times Table")
+            .navigationTitle("Test Your Times Tables")
             .padding(.top, 50)
+            .toolbar {
+                if amountIsFocused {
+                        Button("Done") {
+                            amountIsFocused = false
+                        }
+                }
+            }
         }
         
         
